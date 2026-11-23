@@ -1,0 +1,4 @@
+{$PLUMB_DOMAIN:plumb.13-60-129-92.sslip.io} {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8787
+}
