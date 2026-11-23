@@ -10,6 +10,7 @@ import type {
 import { BudgetExceededError } from "../budget/limiter.js";
 import { classifyEpistemicBoundary } from "../classifier/gate.js";
 import { formatVerifiedContext, sanitizeMinerAnswer } from "../security/sanitize.js";
+import { adjudicateMiners } from "../adjudicator/adjudicator.js";
 
 export interface TelegraphAsker {
   ask(req: TelegraphAskRequest): Promise<TelegraphAskResult>;
@@ -215,13 +216,28 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
     let receiptHash: string | undefined;
     let status: AdjudicationRecord["status"] = "PASSTHROUGH_OK";
     let finalValue: unknown;
+    let disagreementDetected = false;
+    let bugReportMarkdown: string | undefined;
     let upstreamMessages = [...messages];
+    const adjudicateHeader = String(req.headers["x-plumb-adjudicate"] ?? "").toLowerCase() === "true";
+    const compareMinersHeader = String(req.headers["x-plumb-compare-miners"] ?? "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
 
     if (decision.mode === "VERIFY" && decision.intent) {
+      const targetMiners: Array<string | undefined> =
+        compareMinersHeader.length >= 2
+          ? compareMinersHeader.slice(0, 2)
+          : adjudicateHeader
+            ? [undefined, undefined]
+            : [undefined];
+      const requiredReserveUsd = estimatedAskUsd * targetMiners.length;
+
       let reservationId: string | null = null;
       try {
         const reservation = await options.budgetLimiter.reserve(
-          estimatedAskUsd,
+          requiredReserveUsd,
           Number.isFinite(requestCapUsd) ? requestCapUsd : undefined
         );
         reservationId = reservation.id;
@@ -264,45 +280,63 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
         return;
       }
 
-      const askRes = await options.telegraphClient.ask({
-        intent: decision.intent,
-        params: decision.params,
-      });
+      const askResults = await Promise.all(
+        targetMiners.map((minerId) =>
+          options.telegraphClient.ask({
+            intent: decision.intent,
+            params: decision.params,
+            ...(minerId ? { minerId } : {}),
+          })
+        )
+      );
 
-      const sanitized = askRes.ok
-        ? sanitizeMinerAnswer(decision.intent, askRes.answer)
-        : { valid: false, injectionDetected: false, rejectionReason: askRes.errorMessage };
+      let totalBilledUsd = 0;
+      let anyInjection = false;
+      let lastRejectReason: string | undefined;
 
-      const billedUsd = askRes.ok ? askRes.costUsd : 0;
+      for (const askRes of askResults) {
+        const sanitized = askRes.ok
+          ? sanitizeMinerAnswer(decision.intent, askRes.answer)
+          : { valid: false, injectionDetected: false, rejectionReason: askRes.errorMessage };
+        const billedUsd = askRes.ok ? askRes.costUsd : 0;
+        totalBilledUsd += billedUsd;
+        if (sanitized.injectionDetected) anyInjection = true;
+        if (!sanitized.valid) lastRejectReason = sanitized.rejectionReason;
+        if (!receiptHash && askRes.receiptHash) receiptHash = askRes.receiptHash;
+
+        calls.push({
+          minerId: askRes.minerId ?? "unknown",
+          minerName: askRes.minerName,
+          rank: askRes.minerRank,
+          isPrimaryTrack01:
+            Boolean(options.primaryMinerId) &&
+            askRes.minerId === options.primaryMinerId,
+          httpStatus: askRes.httpStatus,
+          latencyMs: askRes.latencyMs,
+          schemaValid: sanitized.valid,
+          injectionFlagged: sanitized.injectionDetected,
+          costUsd: billedUsd,
+          signalHash: askRes.signalHash,
+          receiptHash: askRes.receiptHash,
+          parsedValue: sanitized.data,
+          error: sanitized.valid ? undefined : sanitized.rejectionReason,
+        });
+      }
+
       if (reservationId) {
-        if (billedUsd > 0) {
-          await options.budgetLimiter.settle(reservationId, billedUsd);
+        if (totalBilledUsd > 0) {
+          await options.budgetLimiter.settle(reservationId, totalBilledUsd);
         } else {
           await options.budgetLimiter.release(reservationId);
         }
       }
-      totalCostUsd = billedUsd;
-      receiptHash = askRes.receiptHash;
+      totalCostUsd = Number(totalBilledUsd.toFixed(6));
 
-      calls.push({
-        minerId: askRes.minerId ?? "unknown",
-        minerName: askRes.minerName,
-        rank: askRes.minerRank,
-        isPrimaryTrack01:
-          Boolean(options.primaryMinerId) &&
-          askRes.minerId === options.primaryMinerId,
-        httpStatus: askRes.httpStatus,
-        latencyMs: askRes.latencyMs,
-        schemaValid: sanitized.valid,
-        injectionFlagged: sanitized.injectionDetected,
-        costUsd: billedUsd,
-        signalHash: askRes.signalHash,
-        receiptHash: askRes.receiptHash,
-        parsedValue: sanitized.data,
-        error: sanitized.valid ? undefined : sanitized.rejectionReason,
-      });
+      const adj = adjudicateMiners(decision.intent, decision.params, calls);
+      disagreementDetected = adj.disagreementDetected;
+      bugReportMarkdown = adj.bugReportMarkdown;
 
-      if (!askRes.ok || !sanitized.valid || !sanitized.data) {
+      if (adj.status === "FAIL_CLOSED_MINER" || !adj.finalValue) {
         status = "FAIL_CLOSED_MINER";
         const record: AdjudicationRecord = {
           id: randomUUID(),
@@ -314,7 +348,7 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
           calls,
           totalCostUsd,
           totalLatencyMs: Date.now() - startMs,
-          disagreementDetected: false,
+          disagreementDetected,
         };
         options.onAdjudication?.(record);
         sendJson(
@@ -322,10 +356,10 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
           502,
           {
             error: {
-              message: `plumb fail-closed: ${sanitized.rejectionReason ?? askRes.errorMessage ?? "Telegraph verification failed"}`,
+              message: `plumb fail-closed: ${lastRejectReason ?? "Telegraph verification failed"}`,
               type: "verification_failed",
               code: "FAIL_CLOSED_MINER",
-              injection_quarantined: sanitized.injectionDetected,
+              injection_quarantined: anyInjection,
             },
           },
           {
@@ -338,13 +372,14 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
         return;
       }
 
-      status = "VERIFIED_OK";
-      finalValue = sanitized.data;
+      status = adj.status;
+      finalValue = adj.finalValue;
+      const winningCall = calls.find((c) => c.schemaValid && !c.injectionFlagged);
       const verifiedFact = formatVerifiedContext(
         decision.intent,
-        sanitized.data,
-        askRes.minerName ?? askRes.minerId,
-        askRes.receiptHash
+        finalValue as Record<string, unknown>,
+        winningCall?.minerName ?? winningCall?.minerId,
+        winningCall?.receiptHash
       );
       upstreamMessages = [
         {
@@ -370,6 +405,7 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
         "X-Plumb-Intent": decision.intent ?? "NONE",
         "X-Plumb-Cost-Usd": totalCostUsd.toFixed(6),
         "X-Plumb-Status": status,
+        "X-Plumb-Disagreement": String(disagreementDetected),
       };
       if (receiptHash) plumbHeaders["X-Plumb-Receipt-Hash"] = receiptHash;
 
@@ -384,7 +420,8 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
         finalValue,
         totalCostUsd,
         totalLatencyMs: Date.now() - startMs,
-        disagreementDetected: false,
+        disagreementDetected,
+        bugReportMarkdown,
       };
       options.onAdjudication?.(record);
 

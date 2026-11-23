@@ -1,0 +1,20 @@
+[Unit]
+Description=plumb — Epistemic Boundary Verification Gateway for Telegraph
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/plumb
+EnvironmentFile=-/opt/plumb/.env
+Environment=NODE_ENV=production
+Environment=PLUMB_HOST=127.0.0.1
+Environment=PLUMB_PORT=8787
+ExecStart=/usr/bin/node --import tsx src/proxy/cli.ts
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
