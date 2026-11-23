@@ -285,10 +285,26 @@ export async function evaluatePayoutDossier(
   const rdapT0 = Date.now();
   const [telegraphResults, rdap] = await Promise.all([
     Promise.all(
-      telegraphTasks.map(async (t) => ({
-        task: t,
-        res: await deps.telegraphClient.ask({ intent: t.intent, params: t.params }),
-      }))
+      telegraphTasks.map(async (t) => {
+        let res = await deps.telegraphClient.ask({ intent: t.intent, params: t.params });
+        let effectiveIntent: SupportedIntent = t.intent;
+        // Intelligent recovery: if FX_NOW_EUR miner fails ($0.00 billed), fall back to CURRENCY_EXCHANGE_CONVERT
+        if (t.intent === "FX_NOW_EUR" && !res.ok) {
+          const fallback = await deps.telegraphClient.ask({
+            intent: "CURRENCY_EXCHANGE_CONVERT",
+            params: {
+              from_currency: "EUR",
+              to_currency: "USD",
+              amount: invoice.invoiceAmountEur,
+            },
+          });
+          if (fallback.ok) {
+            res = fallback;
+            effectiveIntent = "CURRENCY_EXCHANGE_CONVERT";
+          }
+        }
+        return { task: { ...t, intent: effectiveIntent }, res };
+      })
     ),
     rdapFn(invoice.counterpartyHost),
   ]);
@@ -394,9 +410,15 @@ export async function evaluatePayoutDossier(
         latencyMs: res.latencyMs,
         parsedValue: sanitized.data,
       });
-    } else if (task.intent === "FX_NOW_EUR") {
-      const rate = Number(sanitized.data.rate);
-      const expectedUsdc = Number((invoice.invoiceAmountEur * rate).toFixed(4));
+    } else if (task.intent === "FX_NOW_EUR" || task.intent === "CURRENCY_EXCHANGE_CONVERT") {
+      const expectedUsdc =
+        task.intent === "CURRENCY_EXCHANGE_CONVERT"
+          ? Number(Number(sanitized.data.converted_amount).toFixed(4))
+          : Number((invoice.invoiceAmountEur * Number(sanitized.data.rate)).toFixed(4));
+      const rate =
+        task.intent === "CURRENCY_EXCHANGE_CONVERT" && invoice.invoiceAmountEur > 0
+          ? Number((expectedUsdc / invoice.invoiceAmountEur).toFixed(6))
+          : Number(sanitized.data.rate);
       const deviationBps =
         expectedUsdc > 0
           ? Math.round((Math.abs(invoice.requestedUsdcAmount - expectedUsdc) / expectedUsdc) * 10_000)

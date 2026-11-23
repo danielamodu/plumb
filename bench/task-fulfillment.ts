@@ -36,18 +36,20 @@ function wilsonCI95(k: number, n: number): [number, number] {
 
 async function fetchHeldOutUrlhausUrls(count: number): Promise<string[]> {
   try {
-    const r = await fetch("https://urlhaus.abuse.ch/downloads/text_recent/", {
+    const r = await fetch("https://openphish.com/feed.txt", {
+      redirect: "follow",
       signal: AbortSignal.timeout(12_000),
     });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const lines = (await r.text())
       .split(/\r?\n/)
       .map((l) => l.trim())
-      .filter((l) => /^https?:\/\//i.test(l) && l.length < 180);
-    // Pick distinct hosts
+      .filter((l) => /^https?:\/\//i.test(l) && l.length < 160);
+    // Pick distinct non-obvious hosts (exclude strings containing 'phish' or 'malware' so LLM can't cheat off filenames)
     const seen = new Set<string>();
     const picked: string[] = [];
     for (const u of lines) {
+      if (/phish|malware|scam|hack|badssl/i.test(u)) continue;
       try {
         const host = new URL(u).hostname;
         if (!seen.has(host) && !/^\d+\.\d+\.\d+\.\d+$/.test(host)) {
@@ -61,7 +63,7 @@ async function fetchHeldOutUrlhausUrls(count: number): Promise<string[]> {
     }
     if (picked.length >= count) return picked;
   } catch {
-    // fallback to known official security fixtures if feed temporarily unreachable
+    // fallback if feed temporarily unreachable
   }
   return [
     "https://testsafebrowsing.appspot.com/s/phishing.html",
