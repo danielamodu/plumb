@@ -1,0 +1,52 @@
+{
+  "executedAtUtc": "2026-11-23T14:06:35.007Z",
+  "datasetSize": 120,
+  "liveQuestions": 60,
+  "passthroughQuestions": 60,
+  "confusionMatrix": {
+    "TP": 60,
+    "FP": 0,
+    "TN": 60,
+    "FN": 0,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1,
+    "accuracy": 1,
+    "intentExactMatches": 60,
+    "intentExactAccuracy": 1
+  },
+  "classifierLatencyMs": {
+    "p50": 0.007,
+    "p95": 0.442
+  },
+  "fourArmPareto": {
+    "arm1_baseLlm": {
+      "telegraphCalls": 0,
+      "telegraphCostUsd": 0,
+      "liveStateVerifiedPct": 0,
+      "cryptographicReceipts": false
+    },
+    "arm2_llmPlusFreeTools": {
+      "telegraphCalls": 0,
+      "telegraphCostUsd": 0,
+      "liveStateVerifiedPct": 50,
+      "cryptographicReceipts": false,
+      "note": "Free public APIs cover basic prices/weather without cryptographic receipts, but lack decentralized adversarial URL/SSL quorum & rate-limit guarantees."
+    },
+    "arm3_alwaysBuyTelegraph": {
+      "telegraphCalls": 120,
+      "telegraphCostUsd": 1.2,
+      "wastedCallsOnStatic": 60,
+      "cryptographicReceipts": true
+    },
+    "arm4_plumbEpistemicGateway": {
+      "telegraphCalls": 60,
+      "telegraphCostUsd": 0.6,
+      "savedVsAlwaysBuyUsd": 0.6,
+      "costReductionPct": 50,
+      "liveStateRecallPct": 100,
+      "cryptographicReceipts": true
+    }
+  },
+  "misclassifications": []
+}
