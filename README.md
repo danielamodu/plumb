@@ -18,7 +18,7 @@
 
 ---
 
-## What is PLUMB? (In Plain English)
+## What is PLUMB?
 
 Imagine you give an AI assistant access to your company wallet so it can pay international vendor invoices automatically.
 
@@ -39,7 +39,7 @@ Imagine you give an AI assistant access to your company wallet so it can pay int
 
 ---
 
-## Try It Live (No Setup Needed)
+## Live Deployment
 
 Everything below is running live right now on HTTPS — click any link to inspect real results:
 
@@ -54,7 +54,7 @@ Everything below is running live right now on HTTPS — click any link to inspec
 
 ---
 
-## Real Results (No Fake Numbers)
+## Benchmark Results
 
 We tested a top AI model (`openai/gpt-oss-120b`) **alone** vs. **protected by PLUMB** on **14 real cross-border vendor payouts**, including **4 live unseen phishing websites** pulled from OpenPhish ([full data](bench/results/TASK_FULFILLMENT.md)):
 
@@ -91,7 +91,7 @@ PLUMB Checkpoint (https://plumb.13-60-129-92.sslip.io)
 
 ---
 
-## 2-Minute Quickstart (Run It Yourself)
+## Quickstart
 
 Run one command to clone, install, typecheck, and run all **28 automated tests**:
 
