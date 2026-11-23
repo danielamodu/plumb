@@ -1,0 +1,23 @@
+{
+  "name": "plumb",
+  "version": "1.0.0",
+  "description": "OpenAI-compatible verification gateway & live Telegraph miner-reliability scoreboard (Mission 07)",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/proxy/cli.ts",
+    "start": "tsx src/proxy/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:adversarial": "node --import tsx --test test/adversarial.test.ts",
+    "bench:120": "tsx bench/stratified-120.ts"
+  },
+  "dependencies": {
+    "viem": "^2.23.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
