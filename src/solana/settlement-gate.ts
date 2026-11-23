@@ -77,7 +77,7 @@ export function createSolanaDevnetBroadcaster(
   const connection = new Connection(rpcUrl, "confirmed");
   return async (recipientPubkey: string, amountSol: number) => {
     const toPubkey = new PublicKey(recipientPubkey);
-    const lamports = Math.max(1, Math.round(amountSol * LAMPORTS_PER_SOL));
+    const lamports = Math.max(1, Math.round(amountSol * Number(LAMPORTS_PER_SOL)));
     const tx = new Transaction().add(
       SystemProgram.transfer({
         fromPubkey: keypair.publicKey,
