@@ -55,8 +55,9 @@ function layout(title: string, active: "home" | "solana" | "ledger" | "scoreboar
   <header>
     <a class="brand" href="/"><span>plumb</span> · Epistemic Boundary Gateway for Telegraph</a>
     <nav>
+      <a href="/payout" class="">EUR→USDC Payout</a>
       <a href="/" class="${active === "home" ? "active" : ""}">Playground</a>
-      <a href="/solana" class="${active === "solana" ? "active" : ""}">Solana Settlement Gate</a>
+      <a href="/solana" class="${active === "solana" ? "active" : ""}">Solana Gate</a>
       <a href="/ledger" class="${active === "ledger" ? "active" : ""}">Live Ledger</a>
       <a href="/scoreboard" class="${active === "scoreboard" ? "active" : ""}">Honest Scoreboard</a>
     </nav>

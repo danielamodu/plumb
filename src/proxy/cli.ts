@@ -2,7 +2,9 @@ import { join } from "node:path";
 import { TelegraphClient } from "../telegraph/client.js";
 import { AtomicBudgetLimiter } from "../budget/limiter.js";
 import { LedgerStore } from "../adjudicator/store.js";
+import { DossierStore } from "../policy/dossier.js";
 import { createDashboardRoutes } from "../web/dashboard.js";
+import { createDossierRoutes } from "../web/dossier-routes.js";
 import {
   createSolanaDevnetBroadcaster,
   evaluateInvoiceSettlement,
@@ -44,11 +46,19 @@ const ledgerStore = new LedgerStore(
   process.env.PLUMB_LEDGER_PATH ?? join(process.cwd(), "data", "ledger.jsonl")
 );
 
-const solanaKeypair = await loadOrCreateDevnetKeypair(
+const dossierStore = new DossierStore(
+  process.env.PLUMB_DOSSIER_PATH ?? join(process.cwd(), "data", "dossiers.jsonl")
+);
+
+const solanaAgentKeypair = await loadOrCreateDevnetKeypair(
   process.env.SOLANA_KEYPAIR_PATH ??
     join(process.cwd(), "data", "solana-devnet-keypair.json")
 );
-const solanaBroadcaster = createSolanaDevnetBroadcaster(solanaKeypair);
+const solanaCosignerKeypair = await loadOrCreateDevnetKeypair(
+  process.env.SOLANA_COSIGNER_KEYPAIR_PATH ??
+    join(process.cwd(), "data", "solana-cosigner-keypair.json")
+);
+const solanaBroadcaster = createSolanaDevnetBroadcaster(solanaAgentKeypair);
 
 async function askFrontierLlm(prompt: string): Promise<string> {
   const r = await fetch(`${upstreamBaseUrl.replace(/\/+$/, "")}/chat/completions`, {
@@ -70,6 +80,28 @@ async function askFrontierLlm(prompt: string): Promise<string> {
   return j.choices?.[0]?.message?.content ?? "HOLD: upstream unavailable";
 }
 
+const dashboardRoutes = createDashboardRoutes(
+  ledgerStore,
+  budgetLimiter,
+  (req) =>
+    evaluateInvoiceSettlement(req, {
+      telegraphClient,
+      budgetLimiter,
+      broadcaster: solanaBroadcaster,
+      senderPubkey: solanaAgentKeypair.publicKey.toBase58(),
+      askFrontierLlm,
+    }),
+  solanaAgentKeypair.publicKey.toBase58()
+);
+
+const dossierRoutes = createDossierRoutes({
+  store: dossierStore,
+  telegraphClient,
+  budgetLimiter,
+  agentKeypair: solanaAgentKeypair,
+  cosignerKeypair: solanaCosignerKeypair,
+});
+
 const server = createPlumbServer({
   upstreamBaseUrl,
   upstreamApiKey,
@@ -80,19 +112,10 @@ const server = createPlumbServer({
   budgetLimiter,
   primaryMinerId: process.env.PRIMARY_MINER_ID,
   onAdjudication: (record) => ledgerStore.append(record),
-  extraRoutes: createDashboardRoutes(
-    ledgerStore,
-    budgetLimiter,
-    (req) =>
-      evaluateInvoiceSettlement(req, {
-        telegraphClient,
-        budgetLimiter,
-        broadcaster: solanaBroadcaster,
-        senderPubkey: solanaKeypair.publicKey.toBase58(),
-        askFrontierLlm,
-      }),
-    solanaKeypair.publicKey.toBase58()
-  ),
+  extraRoutes: async (req, res, url) => {
+    if (await dossierRoutes(req, res, url)) return true;
+    return dashboardRoutes(req, res, url);
+  },
 });
 
 server.listen(port, host, () => {
@@ -101,7 +124,8 @@ server.listen(port, host, () => {
       event: "plumb_listening",
       url: `http://${host}:${port}`,
       payer: telegraphClient.payerAddress ?? "anjoman-or-unconfigured",
-      solanaDevnetTreasury: solanaKeypair.publicKey.toBase58(),
+      solanaAgentPubkey: solanaAgentKeypair.publicKey.toBase58(),
+      solanaCosignerPubkey: solanaCosignerKeypair.publicKey.toBase58(),
       dailyLimitUsd: budgetLimiter.snapshot().dailyLimitUsd,
     })
   );
