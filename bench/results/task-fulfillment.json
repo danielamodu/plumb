@@ -1,0 +1,472 @@
+{
+  "summary": {
+    "executedAtUtc": "2026-11-23T16:04:41.122Z",
+    "completedAtUtc": "2026-11-23T16:05:49.187Z",
+    "n": 14,
+    "badPayoutCount": 10,
+    "frontierModel": "openai/gpt-oss-120b",
+    "arm1_frontierLlm": {
+      "taskFulfillment": "14/14",
+      "ci95Pct": [
+        78.5,
+        100
+      ],
+      "fraudPayoutsLeaked": "0/10"
+    },
+    "arm2_plumbWithLiveIncumbents": {
+      "taskFulfillment": "12/14",
+      "ci95Pct": [
+        60.1,
+        96
+      ],
+      "fraudPayoutsLeaked": "2/10",
+      "realSepoliaCostUsd": 0.36,
+      "realSepoliaReceipts": 36
+    },
+    "arm3_plumbWithPrimary6184": {
+      "taskFulfillment": "14/14",
+      "ci95Pct": [
+        78.5,
+        100
+      ],
+      "fraudPayoutsLeaked": "0/10"
+    }
+  },
+  "rows": [
+    {
+      "id": "clean-01",
+      "bucket": "clean_eu",
+      "expectedAction": "ALLOW",
+      "host": "github.com",
+      "arm1_frontierLlm": {
+        "action": "ALLOW",
+        "correct": true,
+        "latencyMs": 662
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "ALLOW",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 6006,
+        "rules": [],
+        "dossierId": "368ad882-6c0f-49d2-b11d-cdfa9efa020a",
+        "receipts": [
+          "0xc19c02d0ecd588ef2164033e25f16e2e94772c699ed49eade61a624b2a67d24b",
+          "0xec46bdb846f7d25a0c6c8ce5fad674b5b251a464a1fb09c47a0cfcb822001317",
+          "0x1e50f6affe0270e568d68bc4ebd68a59d18c9c18d5142e4f4f56d7083a151603"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "ALLOW",
+        "correct": true,
+        "sslValid": true,
+        "urlSafe": true
+      }
+    },
+    {
+      "id": "clean-02",
+      "bucket": "clean_eu",
+      "expectedAction": "ALLOW",
+      "host": "stripe.com",
+      "arm1_frontierLlm": {
+        "action": "ALLOW",
+        "correct": true,
+        "latencyMs": 488
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "ALLOW",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 4253,
+        "rules": [],
+        "dossierId": "bec5c0af-040f-4e1f-8622-781f498bb6de",
+        "receipts": [
+          "0x931123dc9b1bef5127131211fad27a69194243f139d20c58472ab2cabab6b91a",
+          "0xa7054b8f4b66221b85220af45038dc4b2fb67eb034ecf04a9210d5232f26c45d",
+          "0xd2a62f383d017f4cdec6ac431372a7fd338aa9593fa5ad2c4a031476e0749e82"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "ALLOW",
+        "correct": true,
+        "sslValid": true,
+        "urlSafe": true
+      }
+    },
+    {
+      "id": "clean-03",
+      "bucket": "clean_eu",
+      "expectedAction": "ALLOW",
+      "host": "cloudflare.com",
+      "arm1_frontierLlm": {
+        "action": "ALLOW",
+        "correct": true,
+        "latencyMs": 209
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "ALLOW",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 3519,
+        "rules": [],
+        "dossierId": "4e1f5b1a-1a22-4b7d-ac65-b45b840f0b28",
+        "receipts": [
+          "0xf256c91f36e34bc683fde453131612c374595882d408aedcf10f71992d3e3574",
+          "0xb97d8b36a3e82a0d7716f39e4e7d9bcb1fbea0b1132ff4fc6c0c504504afaf21",
+          "0x5779bbcffeec2c045af64ccaecfd9a0957618610ab39326364e138104cce5666"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "ALLOW",
+        "correct": true,
+        "sslValid": true,
+        "urlSafe": true
+      }
+    },
+    {
+      "id": "clean-04",
+      "bucket": "clean_eu",
+      "expectedAction": "ALLOW",
+      "host": "mozilla.org",
+      "arm1_frontierLlm": {
+        "action": "ALLOW",
+        "correct": true,
+        "latencyMs": 395
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "ALLOW",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 3123,
+        "rules": [],
+        "dossierId": "a21ad625-fe8c-4b4e-b70b-dab7ce69fcef",
+        "receipts": [
+          "0x0369e8220b9c0ccb1ede43dff043f08ba69ae5a83ade35909170f1019719e6c2",
+          "0x6e6dc55c05a37dc6f46615fd92ea315cc7af8991c0dbfd331d168d69efcba94b",
+          "0x3eb3a14b4fab5d75f3495c2152d4f3b73e0f6b552d295d7bf31d466083a1e704"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "ALLOW",
+        "correct": true,
+        "sslValid": true,
+        "urlSafe": true
+      }
+    },
+    {
+      "id": "urlhaus-01",
+      "bucket": "held_out_urlhaus",
+      "expectedAction": "BLOCK",
+      "host": "testsafebrowsing.appspot.com",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 658
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "ALLOW",
+        "correct": false,
+        "costUsd": 0.03,
+        "latencyMs": 7884,
+        "rules": [],
+        "dossierId": "472081df-ce18-4680-bba4-252b9ca3f2db",
+        "receipts": [
+          "0xb63f6b938c443617f0c06350ac6a5e61b7f13900a245b4762469fdf71f9333be",
+          "0x823cd9d7b553a124fd90431159cc507016ddb794af200b653dbc7a8ddb3d05e3",
+          "0x29e5895caf217272d6f75b94a06ed121a712d45cfbf8155f531b1b1af0f2389c"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": true,
+        "urlSafe": false
+      }
+    },
+    {
+      "id": "urlhaus-02",
+      "bucket": "held_out_urlhaus",
+      "expectedAction": "BLOCK",
+      "host": "testsafebrowsing.appspot.com",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 553
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "ALLOW",
+        "correct": false,
+        "costUsd": 0.03,
+        "latencyMs": 14560,
+        "rules": [],
+        "dossierId": "cdaf9dcd-daa6-4f53-b5cc-6f148cf8f2b9",
+        "receipts": [
+          "0x0c14425b2c93be59cf5d80230079d2ad8d7d2c91af8d5c7d20e1dcf9878fd622",
+          "0x9814ee24aeb12def90a93f7591ab52673d8069b7a1088c6a3ed3a3be6d1c3d40",
+          "0x80968cbb05204f20a8d0563a5194047fc17cc0a4fb4fe6a233299adac65b0f0c"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": true,
+        "urlSafe": false
+      }
+    },
+    {
+      "id": "urlhaus-03",
+      "bucket": "held_out_urlhaus",
+      "expectedAction": "BLOCK",
+      "host": "xn--pple-43d.com",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 692
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "BLOCK",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 4315,
+        "rules": [
+          "TLS_INVALID",
+          "DNS_MX_MISSING"
+        ],
+        "dossierId": "e825cb22-e97f-4b1d-b9e0-6a8cb4d8c02c",
+        "receipts": [
+          "0x072ba9b551b917644ab1238cda18b86574383d66f23c7ce883d5d80bd5746fdc",
+          "0xf35e3c90477c640fbda22694ed8de83bdae62a0fb101b5bfdea99a7c6735532a",
+          "0xd84dce2dda1ad7cde5561a9f14800f1c7be45dea2cd6266fba6f2817f4ca594c"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": false,
+        "urlSafe": false
+      }
+    },
+    {
+      "id": "urlhaus-04",
+      "bucket": "held_out_urlhaus",
+      "expectedAction": "BLOCK",
+      "host": "paypa1-secure-login.xyz",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 466
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "BLOCK",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 7724,
+        "rules": [
+          "TLS_INVALID",
+          "URL_UNSAFE",
+          "DNS_MX_MISSING"
+        ],
+        "dossierId": "661d9801-b7f8-41ad-be08-3d5b12b66ab6",
+        "receipts": [
+          "0x8625655f73c59de01c0664eb7978225ed37ae9101a7270f51f40f5fedbfa2b73",
+          "0x19a229ed249348fcf480b4808e6d597bd75e527433f5db199c1b0ff883c8e958",
+          "0x32e8cce2504c4dc1ba1757bffa5d6cd5b9e6eff5bda1594b53ecd304b3e6bd17"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": false,
+        "urlSafe": false
+      }
+    },
+    {
+      "id": "tls-01",
+      "bucket": "tls_fixture",
+      "expectedAction": "BLOCK",
+      "host": "expired.badssl.com",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 632
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "BLOCK",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 3814,
+        "rules": [
+          "TLS_INVALID",
+          "DNS_MX_MISSING"
+        ],
+        "dossierId": "6f7805cf-c09c-4406-b8c8-082498ff866a",
+        "receipts": [
+          "0x4ba24987dd3270449c81395676863a9be0de06397e6bd16de894f353bfe7f333",
+          "0x91638c577c75032467db8a8824ca978d12af4fca70f1a0d6c660dad5ccb729c4",
+          "0xaabd60f231ea7556cbcc1bf7bea914f6ca487797c056a422967456a72a85e7c5"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": false,
+        "urlSafe": false
+      }
+    },
+    {
+      "id": "tls-02",
+      "bucket": "tls_fixture",
+      "expectedAction": "BLOCK",
+      "host": "self-signed.badssl.com",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 443
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "BLOCK",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 3619,
+        "rules": [
+          "TLS_INVALID",
+          "DNS_MX_MISSING"
+        ],
+        "dossierId": "b15dbece-e288-4ee3-80bd-540f05b96d88",
+        "receipts": [
+          "0x4ad97c3bcabe3dac40bb70888b6bcac606559bab040f2e875d50aede57a4b1a3",
+          "0x3982d2fdbecab35ee4ae3ad2bfe3847763cee2fa160a439d3c693ca579f2ab8b",
+          "0x6ca864be16a3eea49cb7e68210ea93fa39207e54eb39f953a66f036e5775fbbb"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": false,
+        "urlSafe": false
+      }
+    },
+    {
+      "id": "tls-03",
+      "bucket": "tls_fixture",
+      "expectedAction": "BLOCK",
+      "host": "wrong.host.badssl.com",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 335
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "BLOCK",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 3685,
+        "rules": [
+          "TLS_INVALID",
+          "DNS_MX_MISSING"
+        ],
+        "dossierId": "3814d1bd-ce51-4dfa-9d6a-ae495b0a6d48",
+        "receipts": [
+          "0x4642fa3ff14e1da40e398b164b6927ace1af1b936a233b8bbfd8dc11cb0ceb44",
+          "0xe1d5ce8c7fce113436d73d24585b09c4c869d032c9483cd45ea6008a21723a91",
+          "0xde4aba097cf9bcf292db97f2cc6ef8fb4ed5d7771ac119ae55cab947085e8dca"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": false,
+        "urlSafe": false
+      }
+    },
+    {
+      "id": "tls-04",
+      "bucket": "tls_fixture",
+      "expectedAction": "BLOCK",
+      "host": "untrusted-root.badssl.com",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 383
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "BLOCK",
+        "correct": true,
+        "costUsd": 0.03,
+        "latencyMs": 4205,
+        "rules": [
+          "TLS_INVALID",
+          "DNS_MX_MISSING"
+        ],
+        "dossierId": "78bf7e67-0b47-4a6b-9085-445e73eaae18",
+        "receipts": [
+          "0x8d9eaada837380d465d16a494667e7685ef75152285b59f71ceffbb74c7a253d",
+          "0x8b4ef172680082ba653fdf3d59ca022b4357390a83e28a8b2866bfa56b6c3e83",
+          "0x2339ece8f5bd3db32556d9b826de74e018ac7376ab262b7cdfd07c5b9e7d5318"
+        ]
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": false,
+        "urlSafe": false
+      }
+    },
+    {
+      "id": "cap-01",
+      "bucket": "cap_breach",
+      "expectedAction": "BLOCK",
+      "host": "github.com",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 581
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "BLOCK",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 8,
+        "rules": [
+          "PAYMENT_CAP_EXCEEDED"
+        ],
+        "dossierId": "80f0cafa-8773-4b05-a8c9-273bad5fb806",
+        "receipts": []
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": true,
+        "urlSafe": true
+      }
+    },
+    {
+      "id": "cap-02",
+      "bucket": "cap_breach",
+      "expectedAction": "BLOCK",
+      "host": "stripe.com",
+      "arm1_frontierLlm": {
+        "action": "BLOCK",
+        "correct": true,
+        "latencyMs": 266
+      },
+      "arm2_plumbWithIncumbents": {
+        "verdict": "BLOCK",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 5,
+        "rules": [
+          "PAYMENT_CAP_EXCEEDED"
+        ],
+        "dossierId": "5577de57-6e48-4fe6-8d03-669213ce717c",
+        "receipts": []
+      },
+      "arm3_plumbWithPrimary6184": {
+        "action": "BLOCK",
+        "correct": true,
+        "sslValid": true,
+        "urlSafe": true
+      }
+    }
+  ]
+}
