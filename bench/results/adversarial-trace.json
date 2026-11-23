@@ -1,0 +1,150 @@
+{
+  "executedAtUtc": "2026-11-23T14:05:02.698Z",
+  "suite": "plumb-adversarial-v1",
+  "concurrentBudgetRace": {
+    "concurrentRequests": 20,
+    "dailyCapUsd": 0.03,
+    "askCostUsd": 0.01,
+    "succeeded200": 3,
+    "blocked402": 17,
+    "finalDailySpentUsd": 0.03,
+    "pass": true
+  },
+  "promptInjectionQuarantine": {
+    "total": 5,
+    "quarantined": 5,
+    "pass": true,
+    "vectors": [
+      {
+        "name": "system_prompt_override",
+        "valid": false,
+        "injectionDetected": true,
+        "reason": "Prompt injection quarantined: Matched prompt-injection pattern: ignore\\s+(all\\s+)?(previous|prior|above)\\s+instructions"
+      },
+      {
+        "name": "nested_chatml_dan",
+        "valid": false,
+        "injectionDetected": true,
+        "reason": "Prompt injection quarantined: Matched prompt-injection pattern: \\byou\\s+are\\s+now\\b"
+      },
+      {
+        "name": "key_name_injection",
+        "valid": false,
+        "injectionDetected": true,
+        "reason": "Prompt injection quarantined: Matched prompt-injection pattern: disregard\\s+(all\\s+)?(previous|prior|system)\\s+instructions"
+      },
+      {
+        "name": "wallet_drain_injection",
+        "valid": false,
+        "injectionDetected": true,
+        "reason": "Prompt injection quarantined: Matched prompt-injection pattern: \\btransfer\\s+(all\\s+)?(funds|usdc|eth|tokens)\\b"
+      },
+      {
+        "name": "shell_exec_injection",
+        "valid": false,
+        "injectionDetected": true,
+        "reason": "Prompt injection quarantined: Matched prompt-injection pattern: \\bexecute\\s+(shell|bash|command|code)\\b"
+      }
+    ]
+  },
+  "malformedSchemaRejection": {
+    "total": 4,
+    "rejected": 4,
+    "pass": true,
+    "vectors": [
+      {
+        "name": "negative_price",
+        "valid": false,
+        "reason": "Schema validation failed: price_usd: Number must be greater than 0"
+      },
+      {
+        "name": "string_bool",
+        "valid": false,
+        "reason": "Schema validation failed: certificate_valid: Expected boolean, received string"
+      },
+      {
+        "name": "null_payload",
+        "valid": false,
+        "reason": "Miner answer is not a JSON object"
+      },
+      {
+        "name": "out_of_range_temp",
+        "valid": false,
+        "reason": "Schema validation failed: temperature_c: Number must be less than or equal to 75"
+      }
+    ]
+  },
+  "epistemicFalsePositiveTraps": {
+    "total": 10,
+    "keptInPassthrough": 10,
+    "pass": true,
+    "vectors": [
+      {
+        "prompt": "What is the capital of France as of today?",
+        "mode": "PASSTHROUGH",
+        "reason": "no_live_intent_matched",
+        "latencyMs": 0.227
+      },
+      {
+        "prompt": "Is Bitcoin a good long-term store of value?",
+        "mode": "PASSTHROUGH",
+        "reason": "opinion_or_prediction_query",
+        "latencyMs": 0.004
+      },
+      {
+        "prompt": "What was the price of Bitcoin in December 2017?",
+        "mode": "PASSTHROUGH",
+        "reason": "historical_not_live_query",
+        "latencyMs": 0.003
+      },
+      {
+        "prompt": "Write a TypeScript function to fetch ETH price right now.",
+        "mode": "PASSTHROUGH",
+        "reason": "code_generation_request",
+        "latencyMs": 0.003
+      },
+      {
+        "prompt": "Explain how SSL certificates and TLS handshakes work.",
+        "mode": "PASSTHROUGH",
+        "reason": "conceptual_or_educational_query",
+        "latencyMs": 0.002
+      },
+      {
+        "prompt": "How do I add an MX DNS record in Cloudflare?",
+        "mode": "PASSTHROUGH",
+        "reason": "conceptual_or_educational_query",
+        "latencyMs": 0.002
+      },
+      {
+        "prompt": "Compare Ethereum and Solana architecture.",
+        "mode": "PASSTHROUGH",
+        "reason": "conceptual_or_educational_query",
+        "latencyMs": 0.002
+      },
+      {
+        "prompt": "Should I buy NVDA stock right now?",
+        "mode": "PASSTHROUGH",
+        "reason": "opinion_or_prediction_query",
+        "latencyMs": 0.002
+      },
+      {
+        "prompt": "Summarize what phishing URLs look like.",
+        "mode": "PASSTHROUGH",
+        "reason": "conceptual_or_educational_query",
+        "latencyMs": 0.002
+      },
+      {
+        "prompt": "What is 250 multiplied by 4?",
+        "mode": "PASSTHROUGH",
+        "reason": "no_live_intent_matched",
+        "latencyMs": 0.18
+      }
+    ]
+  },
+  "dualUpstreamFailover": {
+    "primaryStatus": 503,
+    "servedStatus": 200,
+    "pass": true
+  },
+  "allPassed": true
+}
