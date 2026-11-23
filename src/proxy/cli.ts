@@ -41,7 +41,7 @@ const server = createPlumbServer({
     process.env.UPSTREAM_API_KEY ?? process.env.GROQ_API_KEY ?? "",
   upstreamFallbackBaseUrl: process.env.UPSTREAM_FALLBACK_BASE_URL,
   upstreamFallbackApiKey: process.env.UPSTREAM_FALLBACK_API_KEY,
-  defaultModel: process.env.UPSTREAM_MODEL ?? "llama-3.3-70b-versatile",
+  defaultModel: process.env.UPSTREAM_MODEL ?? "openai/gpt-oss-120b",
   telegraphClient,
   budgetLimiter,
   primaryMinerId: process.env.PRIMARY_MINER_ID,

@@ -365,13 +365,15 @@ export class TelegraphClient {
       (typeof body.receipt_hash === "string" ? body.receipt_hash : undefined);
 
     const answer =
-      body.data !== undefined
-        ? body.data
-        : body.answer !== undefined
-          ? body.answer
-          : body.response !== undefined
-            ? body.response
-            : body;
+      body.result !== undefined
+        ? body.result
+        : body.data !== undefined
+          ? body.data
+          : body.answer !== undefined
+            ? body.answer
+            : body.response !== undefined
+              ? body.response
+              : body;
 
     return {
       ok: true,
