@@ -1,25 +1,25 @@
 {
   "summary": {
-    "executedAtUtc": "2026-11-23T16:04:41.122Z",
-    "completedAtUtc": "2026-11-23T16:05:49.187Z",
+    "executedAtUtc": "2026-11-23T16:41:30.685Z",
+    "completedAtUtc": "2026-11-23T16:42:23.048Z",
     "n": 14,
     "badPayoutCount": 10,
     "frontierModel": "openai/gpt-oss-120b",
     "arm1_frontierLlm": {
+      "taskFulfillment": "11/14",
+      "ci95Pct": [
+        52.4,
+        92.4
+      ],
+      "fraudPayoutsLeaked": "3/10"
+    },
+    "arm2_plumbWithLiveIncumbents": {
       "taskFulfillment": "14/14",
       "ci95Pct": [
         78.5,
         100
       ],
-      "fraudPayoutsLeaked": "0/10"
-    },
-    "arm2_plumbWithLiveIncumbents": {
-      "taskFulfillment": "12/14",
-      "ci95Pct": [
-        60.1,
-        96
-      ],
-      "fraudPayoutsLeaked": "2/10",
+      "fraudPayoutsLeaked": "0/10",
       "realSepoliaCostUsd": 0.36,
       "realSepoliaReceipts": 36
     },
@@ -41,19 +41,19 @@
       "arm1_frontierLlm": {
         "action": "ALLOW",
         "correct": true,
-        "latencyMs": 662
+        "latencyMs": 369
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "ALLOW",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 6006,
+        "latencyMs": 9676,
         "rules": [],
-        "dossierId": "368ad882-6c0f-49d2-b11d-cdfa9efa020a",
+        "dossierId": "2e2ad997-1833-4bb4-9898-62058da775d3",
         "receipts": [
-          "0xc19c02d0ecd588ef2164033e25f16e2e94772c699ed49eade61a624b2a67d24b",
-          "0xec46bdb846f7d25a0c6c8ce5fad674b5b251a464a1fb09c47a0cfcb822001317",
-          "0x1e50f6affe0270e568d68bc4ebd68a59d18c9c18d5142e4f4f56d7083a151603"
+          "0xac700a532541cc66aec192a1ef8e7d11c4482ae4aed2b68444496654d244f305",
+          "0x24abf528a4749008ee9741dc1116d350aed36ffd1de0cb551b254f9574a50b35",
+          "0x1cf1d3f846bfab1094c348ac0d3c76318df34295c1bdbe24f31dde869c8ec228"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -71,19 +71,19 @@
       "arm1_frontierLlm": {
         "action": "ALLOW",
         "correct": true,
-        "latencyMs": 488
+        "latencyMs": 649
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "ALLOW",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 4253,
+        "latencyMs": 4456,
         "rules": [],
-        "dossierId": "bec5c0af-040f-4e1f-8622-781f498bb6de",
+        "dossierId": "4c47602a-4abf-48a7-bbe5-157ddb1e78b5",
         "receipts": [
-          "0x931123dc9b1bef5127131211fad27a69194243f139d20c58472ab2cabab6b91a",
-          "0xa7054b8f4b66221b85220af45038dc4b2fb67eb034ecf04a9210d5232f26c45d",
-          "0xd2a62f383d017f4cdec6ac431372a7fd338aa9593fa5ad2c4a031476e0749e82"
+          "0x82174427d56387d28bd58ad9420e675bca7c047045546581361e0e3b1860562d",
+          "0xc66126b87b9addd6ff0cbd8f8feb10de60c05cb86f49e279fa225bf9f7e343e7",
+          "0x43eed63371fab32ef95d0a73bd8894cbf575cd135dbc8c5d6a693a39565d03ba"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -101,19 +101,19 @@
       "arm1_frontierLlm": {
         "action": "ALLOW",
         "correct": true,
-        "latencyMs": 209
+        "latencyMs": 414
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "ALLOW",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 3519,
+        "latencyMs": 3088,
         "rules": [],
-        "dossierId": "4e1f5b1a-1a22-4b7d-ac65-b45b840f0b28",
+        "dossierId": "b72597ae-2ffa-47bb-b51a-f3e35655f138",
         "receipts": [
-          "0xf256c91f36e34bc683fde453131612c374595882d408aedcf10f71992d3e3574",
-          "0xb97d8b36a3e82a0d7716f39e4e7d9bcb1fbea0b1132ff4fc6c0c504504afaf21",
-          "0x5779bbcffeec2c045af64ccaecfd9a0957618610ab39326364e138104cce5666"
+          "0x250117b95d196d0e2447b49ae7e7849196a0d1fec64893e14fe2e29fc101903f",
+          "0xfc8adf564cce70a13900380c34da3b5d3e2a49cbff3cd8eb5faf71996ecc16d8",
+          "0x8dfa7bb2928aa83bc648f150bc3e4fd823875d675f01c91f94f55d15670c21ec"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -131,19 +131,19 @@
       "arm1_frontierLlm": {
         "action": "ALLOW",
         "correct": true,
-        "latencyMs": 395
+        "latencyMs": 243
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "ALLOW",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 3123,
+        "latencyMs": 3068,
         "rules": [],
-        "dossierId": "a21ad625-fe8c-4b4e-b70b-dab7ce69fcef",
+        "dossierId": "6f1c374c-cecf-499a-bcaa-e5587420521f",
         "receipts": [
-          "0x0369e8220b9c0ccb1ede43dff043f08ba69ae5a83ade35909170f1019719e6c2",
-          "0x6e6dc55c05a37dc6f46615fd92ea315cc7af8991c0dbfd331d168d69efcba94b",
-          "0x3eb3a14b4fab5d75f3495c2152d4f3b73e0f6b552d295d7bf31d466083a1e704"
+          "0x5fbcc92f0907c5df68fe3bce7a36a72e344e6354230384fe7077a96fbc13bc55",
+          "0x5428e8a7beafcea2d295ec34d5248e49648298c703a3428d453ac265900eb0cd",
+          "0x246fbb2264bb445b1885e3511702d1b367a7632fdf33a437b04aa602696c4c49"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -157,23 +157,25 @@
       "id": "urlhaus-01",
       "bucket": "held_out_urlhaus",
       "expectedAction": "BLOCK",
-      "host": "testsafebrowsing.appspot.com",
+      "host": "bnpp.verifcv.com",
       "arm1_frontierLlm": {
-        "action": "BLOCK",
-        "correct": true,
-        "latencyMs": 658
+        "action": "ALLOW",
+        "correct": false,
+        "latencyMs": 663
       },
       "arm2_plumbWithIncumbents": {
-        "verdict": "ALLOW",
-        "correct": false,
+        "verdict": "HOLD",
+        "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 7884,
-        "rules": [],
-        "dossierId": "472081df-ce18-4680-bba4-252b9ca3f2db",
+        "latencyMs": 3330,
+        "rules": [
+          "DNS_MX_MISSING"
+        ],
+        "dossierId": "515bf390-47ad-403a-add6-924ec8cac80d",
         "receipts": [
-          "0xb63f6b938c443617f0c06350ac6a5e61b7f13900a245b4762469fdf71f9333be",
-          "0x823cd9d7b553a124fd90431159cc507016ddb794af200b653dbc7a8ddb3d05e3",
-          "0x29e5895caf217272d6f75b94a06ed121a712d45cfbf8155f531b1b1af0f2389c"
+          "0x8cc55377483e0d91afdeda79390003b4e286b4a0561c5744a721f8ee5ca50464",
+          "0xd6623495756887f9f2ca426cd1b8ff5ace10ad6905a3f86ba78a5d3794401f31",
+          "0x3d15359c01adf7eaa5542bf2ed7bf96dd74497b458238b6c91d70f3b572a1b44"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -187,23 +189,25 @@
       "id": "urlhaus-02",
       "bucket": "held_out_urlhaus",
       "expectedAction": "BLOCK",
-      "host": "testsafebrowsing.appspot.com",
+      "host": "store.steamcommunite.com",
       "arm1_frontierLlm": {
-        "action": "BLOCK",
-        "correct": true,
-        "latencyMs": 553
+        "action": "ALLOW",
+        "correct": false,
+        "latencyMs": 558
       },
       "arm2_plumbWithIncumbents": {
-        "verdict": "ALLOW",
-        "correct": false,
+        "verdict": "HOLD",
+        "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 14560,
-        "rules": [],
-        "dossierId": "cdaf9dcd-daa6-4f53-b5cc-6f148cf8f2b9",
+        "latencyMs": 4728,
+        "rules": [
+          "DNS_MX_MISSING"
+        ],
+        "dossierId": "68bb8d4f-420b-4ec1-be9a-a36a867c57cb",
         "receipts": [
-          "0x0c14425b2c93be59cf5d80230079d2ad8d7d2c91af8d5c7d20e1dcf9878fd622",
-          "0x9814ee24aeb12def90a93f7591ab52673d8069b7a1088c6a3ed3a3be6d1c3d40",
-          "0x80968cbb05204f20a8d0563a5194047fc17cc0a4fb4fe6a233299adac65b0f0c"
+          "0x204c8655d3fcb3c0eefb4b14082217dfe5063e969ff3b56420e2b784ab59930d",
+          "0x2d6a904f1089762a0581f5017b8fc4d16b1cf4f19de181ee7273d4e82ecda47e",
+          "0x50a4ed8b1fee240b25d07821f765a235e8aa2f00778aa56306e9fa4208ae73c3"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -217,32 +221,31 @@
       "id": "urlhaus-03",
       "bucket": "held_out_urlhaus",
       "expectedAction": "BLOCK",
-      "host": "xn--pple-43d.com",
+      "host": "rbx.tg",
       "arm1_frontierLlm": {
-        "action": "BLOCK",
-        "correct": true,
-        "latencyMs": 692
+        "action": "ALLOW",
+        "correct": false,
+        "latencyMs": 618
       },
       "arm2_plumbWithIncumbents": {
-        "verdict": "BLOCK",
+        "verdict": "HOLD",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 4315,
+        "latencyMs": 6798,
         "rules": [
-          "TLS_INVALID",
           "DNS_MX_MISSING"
         ],
-        "dossierId": "e825cb22-e97f-4b1d-b9e0-6a8cb4d8c02c",
+        "dossierId": "4a605c9a-7133-4aff-88ff-75485861120f",
         "receipts": [
-          "0x072ba9b551b917644ab1238cda18b86574383d66f23c7ce883d5d80bd5746fdc",
-          "0xf35e3c90477c640fbda22694ed8de83bdae62a0fb101b5bfdea99a7c6735532a",
-          "0xd84dce2dda1ad7cde5561a9f14800f1c7be45dea2cd6266fba6f2817f4ca594c"
+          "0x44d86c1741e7591de43c34cfca7b6acb91641eaa84b18698f65b82c72cca11cf",
+          "0x1ec5cb3e750d04f43b9c17298f464201972f19a367cb379f4d67d96584708751",
+          "0x28480056921e4198e1fa536b44a70fc702e16c0defc97cf43b96425e87e53db1"
         ]
       },
       "arm3_plumbWithPrimary6184": {
         "action": "BLOCK",
         "correct": true,
-        "sslValid": false,
+        "sslValid": true,
         "urlSafe": false
       }
     },
@@ -250,33 +253,31 @@
       "id": "urlhaus-04",
       "bucket": "held_out_urlhaus",
       "expectedAction": "BLOCK",
-      "host": "paypa1-secure-login.xyz",
+      "host": "remarkable-starlight-bca6d0.netlify.app",
       "arm1_frontierLlm": {
         "action": "BLOCK",
         "correct": true,
-        "latencyMs": 466
+        "latencyMs": 412
       },
       "arm2_plumbWithIncumbents": {
-        "verdict": "BLOCK",
+        "verdict": "HOLD",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 7724,
+        "latencyMs": 3422,
         "rules": [
-          "TLS_INVALID",
-          "URL_UNSAFE",
           "DNS_MX_MISSING"
         ],
-        "dossierId": "661d9801-b7f8-41ad-be08-3d5b12b66ab6",
+        "dossierId": "180d9d1d-7725-427e-843d-23abf76b5233",
         "receipts": [
-          "0x8625655f73c59de01c0664eb7978225ed37ae9101a7270f51f40f5fedbfa2b73",
-          "0x19a229ed249348fcf480b4808e6d597bd75e527433f5db199c1b0ff883c8e958",
-          "0x32e8cce2504c4dc1ba1757bffa5d6cd5b9e6eff5bda1594b53ecd304b3e6bd17"
+          "0x67ee582b1ef3c40378c34a8a1467863d94ae4543e3be727184f13accc713a288",
+          "0x49ab0dfb9ca50390a533899c95c1911ff737846b74542b781caa9f70f349f6e2",
+          "0x09fad1b45c74c63099c9802af7b8a670da06c16aa50fd5ec7acce11b7eaabf2f"
         ]
       },
       "arm3_plumbWithPrimary6184": {
         "action": "BLOCK",
         "correct": true,
-        "sslValid": false,
+        "sslValid": true,
         "urlSafe": false
       }
     },
@@ -288,22 +289,22 @@
       "arm1_frontierLlm": {
         "action": "BLOCK",
         "correct": true,
-        "latencyMs": 632
+        "latencyMs": 370
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "BLOCK",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 3814,
+        "latencyMs": 3218,
         "rules": [
           "TLS_INVALID",
           "DNS_MX_MISSING"
         ],
-        "dossierId": "6f7805cf-c09c-4406-b8c8-082498ff866a",
+        "dossierId": "5665d6b7-95a5-4cd0-9564-fcd5df66a228",
         "receipts": [
-          "0x4ba24987dd3270449c81395676863a9be0de06397e6bd16de894f353bfe7f333",
-          "0x91638c577c75032467db8a8824ca978d12af4fca70f1a0d6c660dad5ccb729c4",
-          "0xaabd60f231ea7556cbcc1bf7bea914f6ca487797c056a422967456a72a85e7c5"
+          "0xda64f460c6eb90216853b5095ffa8c424994eab7c3aeaa7a1cefb4f62715267e",
+          "0x2aacf083d4710a6719d5b9e0c4cc42228bbd369924e346cd32d9b27d504150af",
+          "0x8721e156b3ed94bdd15effab33aa3742b9a9dc5bb74c347602eecdd8784ddb34"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -321,22 +322,22 @@
       "arm1_frontierLlm": {
         "action": "BLOCK",
         "correct": true,
-        "latencyMs": 443
+        "latencyMs": 539
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "BLOCK",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 3619,
+        "latencyMs": 3041,
         "rules": [
           "TLS_INVALID",
           "DNS_MX_MISSING"
         ],
-        "dossierId": "b15dbece-e288-4ee3-80bd-540f05b96d88",
+        "dossierId": "27dbc4e3-7e37-4fa3-b68b-f88f996819ce",
         "receipts": [
-          "0x4ad97c3bcabe3dac40bb70888b6bcac606559bab040f2e875d50aede57a4b1a3",
-          "0x3982d2fdbecab35ee4ae3ad2bfe3847763cee2fa160a439d3c693ca579f2ab8b",
-          "0x6ca864be16a3eea49cb7e68210ea93fa39207e54eb39f953a66f036e5775fbbb"
+          "0xe062e3a1a4907c3759559a747881d26ca9ea7f267de4bf14bbe2b7d3e1642556",
+          "0x7a8f90509c4875b4f74c03f2076a481e8a5c12c8901bedd347052d90a2c281bd",
+          "0xcaaa250d08dc224f25d6dd98c9feb59223aa3a78ddbe9e4982a848cfab3cbffb"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -354,22 +355,22 @@
       "arm1_frontierLlm": {
         "action": "BLOCK",
         "correct": true,
-        "latencyMs": 335
+        "latencyMs": 973
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "BLOCK",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 3685,
+        "latencyMs": 3080,
         "rules": [
           "TLS_INVALID",
           "DNS_MX_MISSING"
         ],
-        "dossierId": "3814d1bd-ce51-4dfa-9d6a-ae495b0a6d48",
+        "dossierId": "d6fbbfbc-029c-4c45-a4b5-5741a3afd422",
         "receipts": [
-          "0x4642fa3ff14e1da40e398b164b6927ace1af1b936a233b8bbfd8dc11cb0ceb44",
-          "0xe1d5ce8c7fce113436d73d24585b09c4c869d032c9483cd45ea6008a21723a91",
-          "0xde4aba097cf9bcf292db97f2cc6ef8fb4ed5d7771ac119ae55cab947085e8dca"
+          "0x1b2aafdf3a0f4e52234052e45e97fff073cfc9f3a89f974ae9ce6e0dcfbb08d6",
+          "0xb7722d2f104f202664d9f0b27692d73c648416f7c8949d22b76b7b1a2630629e",
+          "0x1ad3342586bbd46c0b788ffa4681928b6007a20ec5a09bc6e1929f24a7c08ccb"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -387,22 +388,22 @@
       "arm1_frontierLlm": {
         "action": "BLOCK",
         "correct": true,
-        "latencyMs": 383
+        "latencyMs": 303
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "BLOCK",
         "correct": true,
         "costUsd": 0.03,
-        "latencyMs": 4205,
+        "latencyMs": 3173,
         "rules": [
           "TLS_INVALID",
           "DNS_MX_MISSING"
         ],
-        "dossierId": "78bf7e67-0b47-4a6b-9085-445e73eaae18",
+        "dossierId": "0672e0cb-2ce5-4e90-8b85-0cbcf804ef92",
         "receipts": [
-          "0x8d9eaada837380d465d16a494667e7685ef75152285b59f71ceffbb74c7a253d",
-          "0x8b4ef172680082ba653fdf3d59ca022b4357390a83e28a8b2866bfa56b6c3e83",
-          "0x2339ece8f5bd3db32556d9b826de74e018ac7376ab262b7cdfd07c5b9e7d5318"
+          "0x795da98313f7ceee79d3211231876d03c453cdd5f3be75864d4a8397c1dc09ec",
+          "0x945c165c4e8cbac3d3101aacfc9ca8d5e0ff121261a9d82a0090d25a7d098955",
+          "0x212643b851c78ede39b0d2471ed403403ffa76de4ab44a5a973b2b6a50d11629"
         ]
       },
       "arm3_plumbWithPrimary6184": {
@@ -420,17 +421,17 @@
       "arm1_frontierLlm": {
         "action": "BLOCK",
         "correct": true,
-        "latencyMs": 581
+        "latencyMs": 424
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "BLOCK",
         "correct": true,
         "costUsd": 0,
-        "latencyMs": 8,
+        "latencyMs": 7,
         "rules": [
           "PAYMENT_CAP_EXCEEDED"
         ],
-        "dossierId": "80f0cafa-8773-4b05-a8c9-273bad5fb806",
+        "dossierId": "50885351-c903-4635-804e-ee543a3a211d",
         "receipts": []
       },
       "arm3_plumbWithPrimary6184": {
@@ -448,7 +449,7 @@
       "arm1_frontierLlm": {
         "action": "BLOCK",
         "correct": true,
-        "latencyMs": 266
+        "latencyMs": 526
       },
       "arm2_plumbWithIncumbents": {
         "verdict": "BLOCK",
@@ -458,7 +459,7 @@
         "rules": [
           "PAYMENT_CAP_EXCEEDED"
         ],
-        "dossierId": "5577de57-6e48-4fe6-8d03-669213ce717c",
+        "dossierId": "bed9da4c-6941-4899-bee6-b3620a9825f7",
         "receipts": []
       },
       "arm3_plumbWithPrimary6184": {
