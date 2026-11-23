@@ -6,8 +6,10 @@
 
 ## Live Production URLs (Click & Verify Right Now)
 - **EUR→USDC Payout Policy Co-Signer**: `https://plumb.13-60-129-92.sslip.io/payout`
-- **Sample Live Blocked Payout Dossier**: `https://plumb.13-60-129-92.sslip.io/dossier/67e3c7b5-e8b0-418c-b215-66aa32df0854`
-- **On-Chain Solana Memo Verifier**: `https://plumb.13-60-129-92.sslip.io/verify/<solana_sig>`
+- **Live Allowed 2-of-2 Co-Signed Payout Dossier**: `https://plumb.13-60-129-92.sslip.io/dossier/1819019b-8701-40b4-9185-c08dcd83363d`
+- **Live Solana Devnet TX (Slot `525489512`, 2-of-2 Co-Signed + On-Chain Memo)**: `https://explorer.solana.com/tx/5UAcMn7v7mCHAdst8C9eugHQxrqckCf2juRzVeuPNtkmZCKmQMt56JzEovzzxtP9PJvzFYNwqtVw9ZAoTZF7YoRf?cluster=devnet`
+- **Live On-Chain Memo Verifier (`verified: true`, 3 Telegraph Sepolia Receipts)**: `https://plumb.13-60-129-92.sslip.io/verify/5UAcMn7v7mCHAdst8C9eugHQxrqckCf2juRzVeuPNtkmZCKmQMt56JzEovzzxtP9PJvzFYNwqtVw9ZAoTZF7YoRf`
+- **Live Blocked Payout Dossier (Co-Signature Refused)**: `https://plumb.13-60-129-92.sslip.io/dossier/67e3c7b5-e8b0-418c-b215-66aa32df0854`
 - **OpenAI Proxy Playground**: `https://plumb.13-60-129-92.sslip.io/`
 - **Live Cryptographic Receipt Ledger**: `https://plumb.13-60-129-92.sslip.io/ledger`
 - **Honest Unpinned Miner Scoreboard**: `https://plumb.13-60-129-92.sslip.io/scoreboard`

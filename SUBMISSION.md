@@ -6,8 +6,10 @@
 - **Repository**: `https://github.com/danielamodu/plumb`
 - **Live Production App**:
   - EUR→USDC Payout Policy Co-Signer: `https://plumb.13-60-129-92.sslip.io/payout`
-  - Sample Live Blocked Dossier: `https://plumb.13-60-129-92.sslip.io/dossier/67e3c7b5-e8b0-418c-b215-66aa32df0854`
-  - On-Chain Memo Verifier: `https://plumb.13-60-129-92.sslip.io/verify/<solana_sig>`
+  - Live Allowed 2-of-2 Co-Signed Dossier: `https://plumb.13-60-129-92.sslip.io/dossier/1819019b-8701-40b4-9185-c08dcd83363d`
+  - Live Solana Devnet TX (Slot `525489512`): `https://explorer.solana.com/tx/5UAcMn7v7mCHAdst8C9eugHQxrqckCf2juRzVeuPNtkmZCKmQMt56JzEovzzxtP9PJvzFYNwqtVw9ZAoTZF7YoRf?cluster=devnet`
+  - Live On-Chain Memo Verifier (`verified: true`): `https://plumb.13-60-129-92.sslip.io/verify/5UAcMn7v7mCHAdst8C9eugHQxrqckCf2juRzVeuPNtkmZCKmQMt56JzEovzzxtP9PJvzFYNwqtVw9ZAoTZF7YoRf`
+  - Live Blocked Dossier (Co-Signature Refused): `https://plumb.13-60-129-92.sslip.io/dossier/67e3c7b5-e8b0-418c-b215-66aa32df0854`
   - Live Sepolia Receipt Ledger: `https://plumb.13-60-129-92.sslip.io/ledger`
   - Honest Unpinned Scoreboard: `https://plumb.13-60-129-92.sslip.io/scoreboard`
 
