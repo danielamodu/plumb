@@ -1,6 +1,9 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { BudgetGate } from "../types.js";
 import type { LedgerStore } from "../adjudicator/store.js";
+import type { InvoiceSettlementRequest, InvoiceSettlementResult } from "../solana/settlement-gate.js";
+
+export type SolanaEvaluator = (req: InvoiceSettlementRequest) => Promise<InvoiceSettlementResult>;
 
 function esc(s: unknown): string {
   return String(s ?? "")
@@ -10,7 +13,7 @@ function esc(s: unknown): string {
     .replaceAll('"', "&quot;");
 }
 
-function layout(title: string, active: "home" | "ledger" | "scoreboard", bodyHtml: string): string {
+function layout(title: string, active: "home" | "solana" | "ledger" | "scoreboard", bodyHtml: string): string {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -53,6 +56,7 @@ function layout(title: string, active: "home" | "ledger" | "scoreboard", bodyHtm
     <a class="brand" href="/"><span>plumb</span> · Epistemic Boundary Gateway for Telegraph</a>
     <nav>
       <a href="/" class="${active === "home" ? "active" : ""}">Playground</a>
+      <a href="/solana" class="${active === "solana" ? "active" : ""}">Solana Settlement Gate</a>
       <a href="/ledger" class="${active === "ledger" ? "active" : ""}">Live Ledger</a>
       <a href="/scoreboard" class="${active === "scoreboard" ? "active" : ""}">Honest Scoreboard</a>
     </nav>
@@ -62,13 +66,95 @@ function layout(title: string, active: "home" | "ledger" | "scoreboard", bodyHtm
 </html>`;
 }
 
-export function createDashboardRoutes(store: LedgerStore, budget: BudgetGate) {
+export function createDashboardRoutes(
+  store: LedgerStore,
+  budget: BudgetGate,
+  solanaEvaluator?: SolanaEvaluator,
+  solanaSenderPubkey?: string
+) {
   return async (
     req: IncomingMessage,
     res: ServerResponse,
     url: URL
   ): Promise<boolean> => {
+    if (req.method === "POST" && url.pathname === "/api/solana/evaluate-invoice" && solanaEvaluator) {
+      let raw = "";
+      for await (const chunk of req) raw += chunk;
+      try {
+        const body = JSON.parse(raw) as InvoiceSettlementRequest;
+        const result = await solanaEvaluator(body);
+        res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(400, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+        res.end(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }));
+      }
+      return true;
+    }
+
     if (req.method !== "GET") return false;
+
+    if (url.pathname === "/solana") {
+      const sender = solanaSenderPubkey ?? "Devnet Treasury Agent";
+      const html = layout(
+        "Solana Settlement Gate",
+        "solana",
+        `
+        <div class="card" style="margin-bottom:18px;">
+          <h2 style="margin-top:0">Solana Devnet Pre-Signing Settlement Gate (Use Case #3 × #1)</h2>
+          <p class="note">Compare an autonomous Solana treasury agent using a <strong>Frontier LLM alone</strong> (left) vs <strong>plumb + Telegraph Sepolia Escrow</strong> (right) on the exact same invoice before signing an irreversible Solana Devnet transfer. Treasury wallet: <code>${esc(sender)}</code></p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+            <button type="button" onclick="loadPreset('INV-BAD-001','expired.badssl.com')">Preset 1: Expired TLS Counterparty (expired.badssl.com)</button>
+            <button type="button" onclick="loadPreset('INV-CLEAN-002','github.com')" style="background:#22c55e;">Preset 2: Clean Counterparty (github.com)</button>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:12px;">
+            <div><div class="label">Invoice ID</div><input id="invId" value="INV-BAD-001" style="width:100%;padding:8px;background:#0b0f17;color:#fff;border:1px solid #1f2937;border-radius:6px;" /></div>
+            <div><div class="label">Counterparty Host</div><input id="host" value="expired.badssl.com" style="width:100%;padding:8px;background:#0b0f17;color:#fff;border:1px solid #1f2937;border-radius:6px;" /></div>
+            <div><div class="label">Amount (Devnet SOL)</div><input id="amt" value="0.001" style="width:100%;padding:8px;background:#0b0f17;color:#fff;border:1px solid #1f2937;border-radius:6px;" /></div>
+          </div>
+          <button id="runSplit">Run Split-Screen Comparison</button>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="card">
+            <h3 style="margin-top:0">Arm A: Frontier LLM Alone ($0 Telegraph)</h3>
+            <div id="leftStatus" class="note">Idle</div>
+            <pre id="leftOut" style="min-height:180px;">Click "Run Split-Screen Comparison"</pre>
+          </div>
+          <div class="card">
+            <h3 style="margin-top:0">Arm B: plumb + Telegraph Verified Gate</h3>
+            <div id="rightStatus" class="note">Idle</div>
+            <pre id="rightOut" style="min-height:180px;">Click "Run Split-Screen Comparison"</pre>
+          </div>
+        </div>
+        <script>
+          function loadPreset(id, host) {
+            document.getElementById('invId').value = id;
+            document.getElementById('host').value = host;
+          }
+          document.getElementById('runSplit').onclick = async () => {
+            const payload = {
+              invoiceId: document.getElementById('invId').value.trim(),
+              counterpartyHost: document.getElementById('host').value.trim(),
+              recipientPubkey: '${esc(sender)}',
+              amountSol: Number(document.getElementById('amt').value || 0.001),
+            };
+            document.getElementById('leftStatus').textContent = 'Running Frontier LLM...';
+            document.getElementById('rightStatus').textContent = 'Verifying via Telegraph Sepolia Escrow...';
+            const [l, r] = await Promise.all([
+              fetch('/api/solana/evaluate-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ ...payload, mode: 'frontier_only' }) }).then(x => x.json()),
+              fetch('/api/solana/evaluate-invoice', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ ...payload, mode: 'plumb_verified' }) }).then(x => x.json()),
+            ]);
+            document.getElementById('leftStatus').innerHTML = 'Decision: <strong>' + l.decision + '</strong>' + (l.solanaExplorerUrl ? ' · <a target="_blank" style="color:#38bdf8" href="' + l.solanaExplorerUrl + '">Solana Explorer TX</a>' : '');
+            document.getElementById('leftOut').textContent = JSON.stringify(l, null, 2);
+            document.getElementById('rightStatus').innerHTML = 'Decision: <strong>' + r.decision + '</strong> · Telegraph Cost: $' + (r.telegraphCostUsd || 0).toFixed(4) + (r.solanaExplorerUrl ? ' · <a target="_blank" style="color:#22c55e" href="' + r.solanaExplorerUrl + '">Solana Explorer TX</a>' : ' · NO TX BROADCAST');
+            document.getElementById('rightOut').textContent = JSON.stringify(r, null, 2);
+          };
+        </script>`
+      );
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(html);
+      return true;
+    }
 
     if (url.pathname === "/api/ledger") {
       res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });

@@ -3,10 +3,20 @@ import { TelegraphClient } from "../telegraph/client.js";
 import { AtomicBudgetLimiter } from "../budget/limiter.js";
 import { LedgerStore } from "../adjudicator/store.js";
 import { createDashboardRoutes } from "../web/dashboard.js";
+import {
+  createSolanaDevnetBroadcaster,
+  evaluateInvoiceSettlement,
+  loadOrCreateDevnetKeypair,
+} from "../solana/settlement-gate.js";
 import { createPlumbServer } from "./server.js";
 
 const port = Number(process.env.PLUMB_PORT ?? 8787);
 const host = process.env.PLUMB_HOST ?? "127.0.0.1";
+const upstreamBaseUrl =
+  process.env.UPSTREAM_BASE_URL ?? "https://api.groq.com/openai/v1";
+const upstreamApiKey =
+  process.env.UPSTREAM_API_KEY ?? process.env.GROQ_API_KEY ?? "";
+const defaultModel = process.env.UPSTREAM_MODEL ?? "openai/gpt-oss-120b";
 
 const telegraphClient = new TelegraphClient({
   nodeUrl:
@@ -34,19 +44,55 @@ const ledgerStore = new LedgerStore(
   process.env.PLUMB_LEDGER_PATH ?? join(process.cwd(), "data", "ledger.jsonl")
 );
 
+const solanaKeypair = await loadOrCreateDevnetKeypair(
+  process.env.SOLANA_KEYPAIR_PATH ??
+    join(process.cwd(), "data", "solana-devnet-keypair.json")
+);
+const solanaBroadcaster = createSolanaDevnetBroadcaster(solanaKeypair);
+
+async function askFrontierLlm(prompt: string): Promise<string> {
+  const r = await fetch(`${upstreamBaseUrl.replace(/\/+$/, "")}/chat/completions`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${upstreamApiKey}`,
+    },
+    body: JSON.stringify({
+      model: defaultModel,
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0,
+    }),
+    signal: AbortSignal.timeout(30_000),
+  });
+  const j = (await r.json()) as {
+    choices?: Array<{ message?: { content?: string } }>;
+  };
+  return j.choices?.[0]?.message?.content ?? "HOLD: upstream unavailable";
+}
+
 const server = createPlumbServer({
-  upstreamBaseUrl:
-    process.env.UPSTREAM_BASE_URL ?? "https://api.groq.com/openai/v1",
-  upstreamApiKey:
-    process.env.UPSTREAM_API_KEY ?? process.env.GROQ_API_KEY ?? "",
+  upstreamBaseUrl,
+  upstreamApiKey,
   upstreamFallbackBaseUrl: process.env.UPSTREAM_FALLBACK_BASE_URL,
   upstreamFallbackApiKey: process.env.UPSTREAM_FALLBACK_API_KEY,
-  defaultModel: process.env.UPSTREAM_MODEL ?? "openai/gpt-oss-120b",
+  defaultModel,
   telegraphClient,
   budgetLimiter,
   primaryMinerId: process.env.PRIMARY_MINER_ID,
   onAdjudication: (record) => ledgerStore.append(record),
-  extraRoutes: createDashboardRoutes(ledgerStore, budgetLimiter),
+  extraRoutes: createDashboardRoutes(
+    ledgerStore,
+    budgetLimiter,
+    (req) =>
+      evaluateInvoiceSettlement(req, {
+        telegraphClient,
+        budgetLimiter,
+        broadcaster: solanaBroadcaster,
+        senderPubkey: solanaKeypair.publicKey.toBase58(),
+        askFrontierLlm,
+      }),
+    solanaKeypair.publicKey.toBase58()
+  ),
 });
 
 server.listen(port, host, () => {
@@ -55,6 +101,7 @@ server.listen(port, host, () => {
       event: "plumb_listening",
       url: `http://${host}:${port}`,
       payer: telegraphClient.payerAddress ?? "anjoman-or-unconfigured",
+      solanaDevnetTreasury: solanaKeypair.publicKey.toBase58(),
       dailyLimitUsd: budgetLimiter.snapshot().dailyLimitUsd,
     })
   );

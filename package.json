@@ -12,6 +12,7 @@
     "bench:120": "tsx bench/stratified-120.ts"
   },
   "dependencies": {
+    "@solana/web3.js": "^3.2.1",
     "viem": "^2.23.0",
     "zod": "^3.24.2"
   },
