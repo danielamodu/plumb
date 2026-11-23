@@ -1,6 +1,8 @@
 import { join } from "node:path";
 import { TelegraphClient } from "../telegraph/client.js";
 import { AtomicBudgetLimiter } from "../budget/limiter.js";
+import { LedgerStore } from "../adjudicator/store.js";
+import { createDashboardRoutes } from "../web/dashboard.js";
 import { createPlumbServer } from "./server.js";
 
 const port = Number(process.env.PLUMB_PORT ?? 8787);
@@ -28,6 +30,10 @@ const budgetLimiter = new AtomicBudgetLimiter({
     process.env.PLUMB_SPEND_STATE_PATH ?? join(process.cwd(), "data", "spend.json"),
 });
 
+const ledgerStore = new LedgerStore(
+  process.env.PLUMB_LEDGER_PATH ?? join(process.cwd(), "data", "ledger.jsonl")
+);
+
 const server = createPlumbServer({
   upstreamBaseUrl:
     process.env.UPSTREAM_BASE_URL ?? "https://api.groq.com/openai/v1",
@@ -39,6 +45,8 @@ const server = createPlumbServer({
   telegraphClient,
   budgetLimiter,
   primaryMinerId: process.env.PRIMARY_MINER_ID,
+  onAdjudication: (record) => ledgerStore.append(record),
+  extraRoutes: createDashboardRoutes(ledgerStore, budgetLimiter),
 });
 
 server.listen(port, host, () => {
