@@ -8,8 +8,11 @@
     "start": "tsx src/proxy/cli.ts",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test test/*.test.ts",
-    "test:adversarial": "node --import tsx --test test/adversarial.test.ts",
-    "bench:120": "tsx bench/stratified-120.ts"
+    "test:adversarial": "tsx bench/adversarial.ts",
+    "bench:120": "tsx bench/pareto-benchmark.ts",
+    "bench:4arm": "tsx bench/live-4arm.ts",
+    "bench:payout": "tsx bench/task-fulfillment.ts",
+    "check:readme": "node scripts/check-readme.mjs"
   },
   "dependencies": {
     "@solana/web3.js": "^3.2.1",

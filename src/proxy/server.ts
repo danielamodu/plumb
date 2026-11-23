@@ -11,6 +11,7 @@ import { BudgetExceededError } from "../budget/limiter.js";
 import { classifyEpistemicBoundary } from "../classifier/gate.js";
 import { formatVerifiedContext, sanitizeMinerAnswer } from "../security/sanitize.js";
 import { adjudicateMiners } from "../adjudicator/adjudicator.js";
+import { fetchReferenceSnapshot } from "../adjudicator/reference.js";
 
 export interface TelegraphAsker {
   ask(req: TelegraphAskRequest): Promise<TelegraphAskResult>;
@@ -217,6 +218,7 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
     let status: AdjudicationRecord["status"] = "PASSTHROUGH_OK";
     let finalValue: unknown;
     let disagreementDetected = false;
+    let groundTruthCheck: AdjudicationRecord["groundTruthCheck"];
     let bugReportMarkdown: string | undefined;
     let upstreamMessages = [...messages];
     const adjudicateHeader = String(req.headers["x-plumb-adjudicate"] ?? "").toLowerCase() === "true";
@@ -332,8 +334,18 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
       }
       totalCostUsd = Number(totalBilledUsd.toFixed(6));
 
-      const adj = adjudicateMiners(decision.intent, decision.params, calls);
+      const referenceSnapshot = await fetchReferenceSnapshot(
+        decision.intent,
+        decision.params
+      );
+      const adj = adjudicateMiners(
+        decision.intent,
+        decision.params,
+        calls,
+        referenceSnapshot
+      );
       disagreementDetected = adj.disagreementDetected;
+      groundTruthCheck = adj.groundTruthCheck;
       bugReportMarkdown = adj.bugReportMarkdown;
 
       if (adj.status === "FAIL_CLOSED_MINER" || !adj.finalValue) {
@@ -421,6 +433,7 @@ export function createPlumbServer(options: PlumbServerOptions): Server {
         totalCostUsd,
         totalLatencyMs: Date.now() - startMs,
         disagreementDetected,
+        groundTruthCheck,
         bugReportMarkdown,
       };
       options.onAdjudication?.(record);
