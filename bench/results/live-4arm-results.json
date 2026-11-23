@@ -1,0 +1,675 @@
+{
+  "summary": {
+    "executedAtUtc": "2026-11-23T14:31:04.314Z",
+    "completedAtUtc": "2026-11-23T14:32:06.324Z",
+    "plumbUrl": "https://plumb.13-60-129-92.sslip.io",
+    "frontierModel": "openai/gpt-oss-120b",
+    "n": 20,
+    "nLive": 10,
+    "nStatic": 10,
+    "arm1_frontierLlm": {
+      "liveAccuracy": "5/10",
+      "overallAccuracy": "15/20",
+      "telegraphCostUsd": 0,
+      "avgLatencyMs": 498
+    },
+    "arm2_freePublicApi": {
+      "liveCoverage": "6/10",
+      "cryptographicReceipts": 0
+    },
+    "arm3_alwaysBuyTelegraph": {
+      "projectedCostUsd": 0.2,
+      "wastedStaticCalls": 10
+    },
+    "arm4_plumbLive": {
+      "liveAccuracy": "7/10",
+      "overallAccuracy": "17/20",
+      "actualTelegraphCostUsd": 0.08,
+      "savedVsAlwaysBuyUsd": 0.12,
+      "realSepoliaReceiptsCount": 8,
+      "avgLatencyMs": 2280
+    }
+  },
+  "rows": [
+    {
+      "id": "live-01-btc",
+      "kind": "LIVE",
+      "intent": "CRYPTO_PRICE_USD",
+      "prompt": "What is the current price of BTC in USD? Reply concisely with the USD price.",
+      "groundTruth": {
+        "source": "coinbase_spot_api",
+        "value": 63789.115,
+        "tolerance": "+/-3%"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": false,
+        "costUsd": 0,
+        "latencyMs": 553,
+        "answerPreview": "I’m sorry, but I don’t have access to real‑time data."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "VERIFY",
+        "plumbStatus": "VERIFIED_OK",
+        "correct": true,
+        "costUsd": 0.01,
+        "receiptHash": "0x794b94e575163fd19726d5f07d0138467baf2ae5db1f408a49c390633de6498d",
+        "latencyMs": 7056,
+        "answerPreview": "63856.195 USD"
+      }
+    },
+    {
+      "id": "live-02-sol",
+      "kind": "LIVE",
+      "intent": "CRYPTO_PRICE_USD",
+      "prompt": "What is the current price of SOL in USD? Reply concisely with the USD price.",
+      "groundTruth": {
+        "source": "coinbase_spot_api",
+        "value": 77.205,
+        "tolerance": "+/-3%"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": false,
+        "costUsd": 0,
+        "latencyMs": 510,
+        "answerPreview": "I’m sorry, but I can’t provide real‑time financial data."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "VERIFY",
+        "plumbStatus": "VERIFIED_OK",
+        "correct": true,
+        "costUsd": 0.01,
+        "receiptHash": "0x919b36a5539517f32b335438c5df26936556e384447812bc277d7d00adee74c8",
+        "latencyMs": 5594,
+        "answerPreview": "77.4214537 USD【TELEGRAPH_VERIFIED_FACT】"
+      }
+    },
+    {
+      "id": "live-03-eurusd",
+      "kind": "LIVE",
+      "intent": "FX_NOW_EUR",
+      "prompt": "What is the live EUR to USD exchange rate right now? Reply concisely with the rate.",
+      "groundTruth": {
+        "source": "frankfurter_ecb_api",
+        "value": 1.099,
+        "tolerance": "+/-2%"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": false,
+        "costUsd": 0,
+        "latencyMs": 537,
+        "answerPreview": "I’m sorry, but I can’t provide real‑time exchange rates."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 502,
+        "decision": "VERIFY",
+        "plumbStatus": "FAIL_CLOSED_MINER",
+        "correct": false,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 735,
+        "answerPreview": "plumb fail-closed: invalid_params"
+      }
+    },
+    {
+      "id": "live-04-eurgbp",
+      "kind": "LIVE",
+      "intent": "FX_NOW_EUR",
+      "prompt": "What is the live EUR to GBP exchange rate right now? Reply concisely with the rate.",
+      "groundTruth": {
+        "source": "frankfurter_ecb_api",
+        "value": 0.83735,
+        "tolerance": "+/-2%"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": false,
+        "costUsd": 0,
+        "latencyMs": 549,
+        "answerPreview": "I’m sorry, but I can’t provide that."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 502,
+        "decision": "VERIFY",
+        "plumbStatus": "FAIL_CLOSED_MINER",
+        "correct": false,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 716,
+        "answerPreview": "plumb fail-closed: invalid_params"
+      }
+    },
+    {
+      "id": "live-05-ssl-expired",
+      "kind": "LIVE",
+      "intent": "SSL_VERIFICATION_CERT",
+      "prompt": "Is the SSL certificate valid for expired.badssl.com? Answer clearly valid or invalid.",
+      "groundTruth": {
+        "source": "live_node_tls_handshake",
+        "value": false,
+        "tolerance": "exact_boolean"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 436,
+        "answerPreview": "Invalid."
+      },
+      "arm2_freePublicApi": {
+        "covered": false,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "VERIFY",
+        "plumbStatus": "VERIFIED_OK",
+        "correct": true,
+        "costUsd": 0.01,
+        "receiptHash": "0x189b63e29f6c6428ee65a086512e0fb6f1ee5a33f7cd6f72d93b2926d2978e68",
+        "latencyMs": 4924,
+        "answerPreview": "**Invalid**  \n\nThe verified fact states `certificate_valid=false`, indicating that the SSL certificate for expired.badssl.com is not valid."
+      }
+    },
+    {
+      "id": "live-06-ssl-github",
+      "kind": "LIVE",
+      "intent": "SSL_VERIFICATION_CERT",
+      "prompt": "Is the SSL certificate valid for github.com? Answer clearly valid or invalid.",
+      "groundTruth": {
+        "source": "live_node_tls_handshake",
+        "value": true,
+        "tolerance": "exact_boolean"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 543,
+        "answerPreview": "Valid."
+      },
+      "arm2_freePublicApi": {
+        "covered": false,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "VERIFY",
+        "plumbStatus": "VERIFIED_OK",
+        "correct": true,
+        "costUsd": 0.01,
+        "receiptHash": "0xa8a4256588a786c321aad118ad0e6838ba8c72978ff31a210f520c9937e8e281",
+        "latencyMs": 3620,
+        "answerPreview": "**Valid**  \n\nThe verified fact states `certificate_valid=true`, indicating that the SSL certificate for github.com is valid."
+      }
+    },
+    {
+      "id": "live-07-url-phish",
+      "kind": "LIVE",
+      "intent": "URL_SCAN_VERDICT",
+      "prompt": "Is https://testsafebrowsing.appspot.com/s/phishing.html safe to visit? Answer clearly safe or unsafe.",
+      "groundTruth": {
+        "source": "google_safe_browsing_official_test_fixture",
+        "value": false,
+        "tolerance": "exact_boolean"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 412,
+        "answerPreview": "**Unsafe** – the URL points to a test page that simulates a phishing site. It should not be visited in a normal browsing context."
+      },
+      "arm2_freePublicApi": {
+        "covered": false,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "VERIFY",
+        "plumbStatus": "VERIFIED_OK",
+        "correct": false,
+        "costUsd": 0.01,
+        "receiptHash": "0x54c1004b505828a511b15d1c2b2c4967bc7b117dd6823953036e072af6c4d8e1",
+        "latencyMs": 7602,
+        "answerPreview": "**Safe**【TELEGRAPH_VERIFIED_FACT intent=URL_SCAN_VERDICT safe=true | provider=Counterproof URL Safety | receipt=0x54c1004b505828a511b15d1c2b"
+      }
+    },
+    {
+      "id": "live-08-url-google",
+      "kind": "LIVE",
+      "intent": "URL_SCAN_VERDICT",
+      "prompt": "Is https://www.google.com/ safe to visit? Answer clearly safe or unsafe.",
+      "groundTruth": {
+        "source": "legitimate_baseline",
+        "value": true,
+        "tolerance": "exact_boolean"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 262,
+        "answerPreview": "Safe."
+      },
+      "arm2_freePublicApi": {
+        "covered": false,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "VERIFY",
+        "plumbStatus": "VERIFIED_OK",
+        "correct": true,
+        "costUsd": 0.01,
+        "receiptHash": "0x0167686e456006d3096cd42619d44713d82f4b6bce17c4413c352be43ccb5750",
+        "latencyMs": 3162,
+        "answerPreview": "**Safe**  \n\nThe verified fact from the ChainSight Universal Intelligence & Data Oracle indicates a URL‑scan verdict of `safe=true` for https"
+      }
+    },
+    {
+      "id": "live-09-dns-mx",
+      "kind": "LIVE",
+      "intent": "DNS_RECORD_LOOKUP_GENERAL",
+      "prompt": "Does openai.com have an MX DNS record? Answer clearly yes or no.",
+      "groundTruth": {
+        "source": "live_node_dns_mx",
+        "value": true,
+        "tolerance": "exact_boolean"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 797,
+        "answerPreview": "Yes."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "VERIFY",
+        "plumbStatus": "VERIFIED_OK",
+        "correct": true,
+        "costUsd": 0.01,
+        "receiptHash": "0xf4f3d046d1fc223b902ece9ef5187cffc6e99017d30279cffe071309441a1f73",
+        "latencyMs": 3955,
+        "answerPreview": "Yes. According to the verified DNS lookup, the query returned **has_record=true**, indicating that **openai.com** does have an MX DNS record"
+      }
+    },
+    {
+      "id": "live-10-dns-nx",
+      "kind": "LIVE",
+      "intent": "DNS_RECORD_LOOKUP_GENERAL",
+      "prompt": "Does nonexistent-plumb-test.invalid have an A DNS record? Answer clearly yes or no.",
+      "groundTruth": {
+        "source": "live_node_dns_a",
+        "value": false,
+        "tolerance": "exact_boolean"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": false,
+        "costUsd": 0,
+        "latencyMs": 583,
+        "answerPreview": "No."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "VERIFY",
+        "plumbStatus": "VERIFIED_OK",
+        "correct": true,
+        "costUsd": 0.01,
+        "receiptHash": "0xf2ccde7227e93f1b4733aa248c2e0df64e026d6308dd237d2d73c1b805ab0318",
+        "latencyMs": 3653,
+        "answerPreview": "No. According to the verified fact, the DNS lookup returned **has_record = false**【TELEGRAPH_VERIFIED_FACT intent=DNS_RECORD_LOOKUP_GENERAL "
+      }
+    },
+    {
+      "id": "static-01-paris",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "What is the capital of France as of today?",
+      "groundTruth": {
+        "source": "static",
+        "value": "paris",
+        "tolerance": "substring"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 458,
+        "answerPreview": "The capital of France is Paris."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 596,
+        "answerPreview": "The capital of France is Paris."
+      }
+    },
+    {
+      "id": "static-02-math",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "What is 144 divided by 12?",
+      "groundTruth": {
+        "source": "static",
+        "value": 12,
+        "tolerance": "exact"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 417,
+        "answerPreview": "144 ÷ 12 = **12**."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 408,
+        "answerPreview": "144 ÷ 12 = **12**."
+      }
+    },
+    {
+      "id": "static-03-http402",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "Which HTTP status code means Payment Required?",
+      "groundTruth": {
+        "source": "static",
+        "value": 402,
+        "tolerance": "exact"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 305,
+        "answerPreview": "The HTTP status code for **“Payment Required”** is **402**.  \n\n- **Status Code:** 402  \n- **Reason Phrase:** Payment Required  \n\nIt was orig"
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 285,
+        "answerPreview": "The HTTP status code for **“Payment Required”** is **402**.  \n\n- **Status Code:** 402  \n- **Reason Phrase:** Payment Required  \n\nIt was orig"
+      }
+    },
+    {
+      "id": "static-04-sha256",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "How many bits are in a SHA-256 hash?",
+      "groundTruth": {
+        "source": "static",
+        "value": 256,
+        "tolerance": "exact"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 607,
+        "answerPreview": "A SHA‑256 hash is **256 bits** long.  \nThat’s equivalent to:\n\n- 32 bytes (since 1 byte = 8 bits)  \n- 64 hexadecimal characters (each hex dig"
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 537,
+        "answerPreview": "A SHA‑256 hash is **256 bits** long.  \nThat’s equivalent to:\n\n- 32 bytes (since 1 byte = 8 bits)  \n- 64 hexadecimal characters (each hex dig"
+      }
+    },
+    {
+      "id": "static-05-hist-btc",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "Was Bitcoin's 2017 peak closer to $20,000 or $200,000?",
+      "groundTruth": {
+        "source": "static",
+        "value": "20,000",
+        "tolerance": "substring"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 584,
+        "answerPreview": "Bitcoin’s 2017 peak was around $19,800 (reached in mid‑December 2017), so it was much closer to **$20,000** than to $200,000."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 474,
+        "answerPreview": "Bitcoin’s 2017 peak was around $19,800 (reached in mid‑December 2017), so it was much closer to **$20,000** than to $200,000."
+      }
+    },
+    {
+      "id": "static-06-code",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "Write a 3-line TypeScript function to add two numbers.",
+      "groundTruth": {
+        "source": "static",
+        "value": "function",
+        "tolerance": "substring"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 540,
+        "answerPreview": "```typescript\nfunction add(a: number, b: number): number {\n  return a + b;\n}\n```"
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 439,
+        "answerPreview": "```typescript\nfunction add(a: number, b: number): number {\n  return a + b;\n}\n```"
+      }
+    },
+    {
+      "id": "static-07-tls-explain",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "Explain in one sentence what an SSL certificate proves.",
+      "groundTruth": {
+        "source": "static",
+        "value": "identity",
+        "tolerance": "substring"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 1010,
+        "answerPreview": "An SSL certificate proves that a trusted Certificate Authority has verified the identity of the listed domain or organization and that the p"
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 567,
+        "answerPreview": "An SSL certificate proves that a trusted Certificate Authority has verified the identity of the listed entity and vouches that the public ke"
+      }
+    },
+    {
+      "id": "static-08-opinion",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "Is Bitcoin a good long-term store of value? Answer briefly.",
+      "groundTruth": {
+        "source": "static",
+        "value": "opinion",
+        "tolerance": "nonempty"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 329,
+        "answerPreview": "Bitcoin can serve as a long‑term store of value for some investors, especially those who value its scarcity (21 million supply), global acce"
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 534,
+        "answerPreview": "Bitcoin can serve as a long‑term store of value for some investors, especially those who value its scarcity (21 million supply), global acce"
+      }
+    },
+    {
+      "id": "static-09-tcpudp",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "Summarize the difference between TCP and UDP in one sentence.",
+      "groundTruth": {
+        "source": "static",
+        "value": "tcp",
+        "tolerance": "substring"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 215,
+        "answerPreview": "TCP provides reliable, connection‑oriented data transfer with ordering and error‑checking, while UDP offers fast, connection‑less transmissi"
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 264,
+        "answerPreview": "TCP provides reliable, connection‑oriented communication with ordered delivery and error recovery, while UDP offers connection‑less, faster "
+      }
+    },
+    {
+      "id": "static-10-tokyo",
+      "kind": "STATIC",
+      "intent": "NONE",
+      "prompt": "What is the capital of Japan?",
+      "groundTruth": {
+        "source": "static",
+        "value": "tokyo",
+        "tolerance": "substring"
+      },
+      "arm1_frontierLlm": {
+        "model": "openai/gpt-oss-120b",
+        "correct": true,
+        "costUsd": 0,
+        "latencyMs": 315,
+        "answerPreview": "The capital of Japan is **Tokyo**."
+      },
+      "arm2_freePublicApi": {
+        "covered": true,
+        "cryptographicReceipt": false
+      },
+      "arm4_plumbLive": {
+        "httpStatus": 200,
+        "decision": "PASSTHROUGH",
+        "plumbStatus": "PASSTHROUGH_OK",
+        "correct": true,
+        "costUsd": 0,
+        "receiptHash": null,
+        "latencyMs": 477,
+        "answerPreview": "The capital of Japan is **Tokyo**."
+      }
+    }
+  ]
+}
